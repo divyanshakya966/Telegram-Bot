@@ -165,7 +165,7 @@ async def register_welcome_handler(client):
         try:
             chat = await event.get_chat()
 
-            # --- Welcome logic ---
+            # Welcome logic
             if event.user_joined or event.user_added:
                 if event.user:
                     target_user = await event.get_user()
@@ -189,7 +189,7 @@ async def register_welcome_handler(client):
                             asyncio.create_task(remove_from_set(recently_welcomed, key, 30))
                             await asyncio.sleep(1)
 
-            # --- Goodbye logic ---
+            # Goodbye logic
             if event.user_left or event.user_kicked:
                 if event.user:
                     target_user = await event.get_user()
@@ -265,7 +265,7 @@ async def register_welcome_handler(client):
 
         await send_fancy_welcome(client, chat, target_user, event.reply_to_msg_id)
 
-    # Manual goodbye handler - FIXED VERSION (no duplicate messages)
+    # Manual goodbye handler
     @client.on(events.NewMessage(pattern=r'^/goodbye(?:\s+(.*))?$'))
     async def manual_goodbye(event):
         """Remove user from group and send goodbye message"""

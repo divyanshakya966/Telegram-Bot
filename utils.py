@@ -16,7 +16,6 @@ import time
 import sys
 from collections import defaultdict
 
-# Setup logging with proper encoding for Windows
 def setup_logging():
     """
     Configure logging for the bot.
@@ -27,7 +26,7 @@ def setup_logging():
     Returns:
         logging.Logger: Configured logger instance
     """
-    # Create formatter without emojis for log files
+    # Create formatter for log files
     file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     
     # Create formatter for console (handle encoding)
@@ -49,10 +48,8 @@ def setup_logging():
     
     return logger
 
-# Initialize logger
 logger = setup_logging()
 
-# Moderation logging - stores recent moderation actions in memory
 moderation_log = []
 
 def log_moderation_action(admin_id, admin_name, action, target_id, target_name, chat_id, success=True):

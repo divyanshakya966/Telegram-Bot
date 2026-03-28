@@ -7,9 +7,7 @@ from datetime import datetime
 from utils import logger
 
 def format_user_status(status):
-    """
-    Converts a Telegram UserStatus object to a human-readable string.
-    """
+    """Converts a Telegram UserStatus object to a human-readable string."""
     if isinstance(status, UserStatusOnline):
         return "🟢 Online"
     
@@ -43,7 +41,6 @@ def format_user_status(status):
     else:
         return f"❓ Unknown status: {type(status).__name__}"
 
-
 async def register_userinfo_handler(client):
     @client.on(events.NewMessage(pattern=r'^/uinfo(?:\s+(@?\w+))?'))
     async def userinfo_handler(event):
@@ -66,7 +63,6 @@ async def register_userinfo_handler(client):
             logger.error(f"Userinfo fetch error: {e}")
             return
 
-
         entity = target_user
         text = "<b>📊 User Information:</b>\n\n"
         text += f"🆔 <b>ID:</b> <code>{entity.id}</code>\n"
@@ -86,6 +82,5 @@ async def register_userinfo_handler(client):
         
         if hasattr(entity, 'restriction_reason') and entity.restriction_reason:
             text += f"🔒 <b>Restriction:</b> {entity.restriction_reason}\n"
-
 
         await event.reply(text, parse_mode='html')

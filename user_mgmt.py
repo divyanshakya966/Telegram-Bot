@@ -45,7 +45,7 @@ async def get_user_from_event(client, event):
                     
                 return user
                 
-            except (UsernameInvalidError, ValueError, PeerIdInvalidError):  # ValueError is built-in Python
+            except (UsernameInvalidError, ValueError, PeerIdInvalidError):
                 await event.reply(f"❌ User not found: {username_part}")
                 return None
             except Exception as e:

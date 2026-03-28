@@ -1,12 +1,12 @@
 """
-Simple Telegram Moderation Bot - Main Entry Point
+Telegram Moderation Bot - Main Entry Point
 
 This is the main entry point for the Telegram moderation bot.
 It initializes the Telethon client, registers all command handlers,
 and starts the bot to listen for events.
 
 Author: Divyansh Shakya
-Repository: https://github.com/divyanshakya966/Simple-tg-bot
+Repository: https://github.com/divyanshakya966/Telegram-Bot
 """
 
 import asyncio
@@ -29,19 +29,15 @@ async def main():
         Exception: If bot initialization or startup fails
     """
     try:
-        # Initialize Telethon client with session name and API credentials
         client = TelegramClient(SESSION_NAME, API_ID, API_HASH)
         
-        # Register all command handlers (ban, mute, welcome, etc.)
         await register_handlers(client)
         
-        # Start the bot with the bot token from @BotFather
         await client.start(bot_token=BOT_TOKEN)
         
         print("✅ Bot started successfully!")
         print("💡 Use /status in your group to check bot permissions")
         
-        # Keep the bot running indefinitely until interrupted
         await client.run_until_disconnected()
         
     except Exception as e:
@@ -49,5 +45,4 @@ async def main():
         logger.error(f"Bot error: {e}")
 
 if __name__ == '__main__':
-    # Run the main async function
     asyncio.run(main())
