@@ -1,5 +1,8 @@
+.env-default
 .env
+.venv
 bot.log
 bot.session
 bot_session.session
+bot_session.session-journal
 __pycache__

@@ -9,15 +9,12 @@ from userinfo import register_userinfo_handler
 
 async def register_handlers(client):
     """Register all command handlers"""
-    
-    # CLEANED Welcome handler - no unnecessary logs
+
     @client.on(events.ChatAction)
     async def handle_welcome(event):
         try:
-            # Process both user_joined and user_added events
             if not (event.user_joined or event.user_added):
                 return
-            
             new_user = None
             
             # Get the action from the event
@@ -29,18 +26,16 @@ async def register_handlers(client):
                     try:
                         new_user = await client.get_entity(action_msg.from_id)
                     except Exception:
-                        pass  # Silent fail, no logging
+                        pass
                 
                 # Case 2: User was added by someone else
                 elif event.user_added and hasattr(action_msg, 'action') and hasattr(action_msg.action, 'users'):
                     try:
-                        # Get the first user from the action (newly added)
                         new_user_id = action_msg.action.users[0]
                         new_user = await client.get_entity(new_user_id)
                     except Exception:
-                        pass  # Silent fail, no logging
+                        pass
             
-            # If we found a new user, welcome them instantly
             if new_user:
                 try:
                     chat = await event.get_chat()
@@ -48,13 +43,10 @@ async def register_handlers(client):
                     logger.info(f"Welcomed: {new_user.first_name} ({new_user.id})")
                 except Exception as e:
                     logger.error(f"Error sending welcome: {e}")
-            
-            # No logging if user not found - this eliminates spam
                         
         except Exception as e:
             logger.error(f"Welcome handler error: {e}")
 
-    # All moderation commands remain exactly the same...
     @client.on(events.NewMessage(pattern=r'^/ban'))
     async def ban_cmd(event):
         if not check_rate_limit(event.sender_id):
@@ -125,57 +117,16 @@ async def register_handlers(client):
         if user:
             await moderate_user(client, event, user, "kick", None)
 
-    # Public commands
     @client.on(events.NewMessage(pattern=r'^/help'))
     async def help_cmd(event):
-        help_text = """
-    🤖 **Moderation Bot Commands:**
-    
-    
-**Admin Only Commands:**
-• `/ban` - Ban user (reply or @username)
-• `/unban` - Unban user  
-• `/mute` - Mute user (reply or @username)
-• `/unmute` - Unmute user
-• `/kick` - Kick user (reply or @username)
-• `/welcome` - Send custom welcome (reply or @username)
-• `/goodbye` - Remove user & send goodbye (reply or @username)
+        help_text = open("text_files/help_text.txt", encoding="utf-8")
 
+        await event.reply(help_text.read())
 
-**Public Commands:**
-• `/help` - Show this help
-• `/status` - Check bot status  
-• `/uinfo` - Get user info (reply or @username)
-
-
-**Usage Examples:**
-• `/ban @username`
-• `/mute` (reply to message)
-• `/kick @spammer`
-• `/uinfo @someone`
-• `/welcome @newuser`
-• `/goodbye @troublemaker`
-
-
-**Features:**
-• ✅ Auto-welcome messages (join & add)
-• ✅ Auto-goodbye messages (leave & remove)
-• ✅ Admin-only moderation commands  
-• ✅ Human-readable user status display
-• ✅ Rate limiting (2sec cooldown)
-• ✅ Creator protection
-• ✅ Admin protection
-• ✅ Duplicate message prevention
-• ✅ Complete action logging
-
-
-**Welcome/Goodbye System:**
-• 🌸 Fancy welcome with image & user info
-• 👋 Personalized goodbye messages
-• 🔄 Works for joins, adds, leaves, kicks
-• 🛡️ Duplicate prevention system
-    """
-        await event.reply(help_text)
+    @client.on(events.NewMessage(pattern=r'^/start'))
+    async def help_cmd(event):
+        start_text = open("text_files/start_text.txt", encoding="utf-8")
+        await event.reply(start_text.read())
 
     @client.on(events.NewMessage(pattern=r'^/status'))
     async def status_cmd(event):
@@ -183,20 +134,9 @@ async def register_handlers(client):
             me = await client.get_me()
             is_admin = await check_bot_admin_status(client, event.chat_id)
             user_is_admin = await check_user_is_admin(client, event)
-            
-            status_text = f"""
-🤖 **Bot Status:**
-• Bot ID: `{me.id}`
-• Username: @{me.username}
-• Bot Admin Status: {'✅ Yes' if is_admin else '❌ No'}
-• Your Admin Status: {'✅ Yes' if user_is_admin else '❌ No'}
-• Chat ID: `{event.chat_id}`
-• Rate Limiting: ✅ Active
-• Action Logging: ✅ Active
-• Clean Welcome: ✅ Active
-
-{('⚠️ **Bot needs admin privileges!**' if not is_admin else '✅ **Bot ready to moderate!**')}
-            """
+            with open("text_files/status_text.txt", "r", encoding="utf-8") as f:
+                text = f.read()
+            status_text = eval(f'f"""{text}"""')
             await event.reply(status_text)
         except Exception as e:
             await event.reply(f"Status check failed: {e}")
@@ -211,6 +151,5 @@ async def register_handlers(client):
         log_text = format_log_text(logs)
         await event.reply(log_text)
 
-    # Register new handlers
     await register_welcome_handler(client)
     await register_userinfo_handler(client)

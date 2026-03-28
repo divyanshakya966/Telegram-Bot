@@ -1,0 +1,23 @@
+🤖 **Moderation Bot Commands:**
+    
+**Admin Only Commands:**
+• `/ban` - Ban user (reply or @username)
+• `/unban` - Unban user  
+• `/mute` - Mute user (reply or @username)
+• `/unmute` - Unmute user
+• `/kick` - Kick user (reply or @username)
+• `/welcome` - Send custom welcome (reply or @username)
+• `/goodbye` - Remove user & send goodbye (reply or @username)
+
+**Public Commands:**
+• `/help` - Show this help
+• `/status` - Check bot status  
+• `/uinfo` - Get user info (reply or @username)
+
+**Usage Examples:**
+• `/ban @username`
+• `/mute` (reply to message)
+• `/kick @spammer`
+• `/uinfo @someone`
+• `/welcome @newuser`
+• `/goodbye @troublemaker`

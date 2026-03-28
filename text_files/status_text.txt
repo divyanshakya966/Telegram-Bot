@@ -1,0 +1,12 @@
+🤖 **Bot Status:**
+
+• Bot ID: `{me.id}`
+• Username: @{me.username}
+• Bot Admin Status: {'✅ Yes' if is_admin else '❌ No'}
+• Your Admin Status: {'✅ Yes' if user_is_admin else '❌ No'}
+• Chat ID: `{event.chat_id}`
+• Rate Limiting: ✅ Active
+• Action Logging: ✅ Active
+• Clean Welcome: ✅ Active
+
+{('⚠️ **Bot needs admin privileges!**' if not is_admin else '✅ **Bot ready to moderate!**')}

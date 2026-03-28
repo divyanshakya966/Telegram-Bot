@@ -1,0 +1,12 @@
+🤖 **Mr. Manager : Moderation Bot**
+    
+**Features:**
+• Auto-welcome messages (join & add)
+• Auto-goodbye messages (leave & remove)
+• Admin-only moderation commands  
+• Human-readable user status display
+• Rate limiting (2sec cooldown)
+• Creator protection
+• Admin protection
+• Duplicate message prevention
+• Complete action logging
