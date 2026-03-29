@@ -85,7 +85,7 @@ async def send_fancy_welcome(client, chat, target_user, reply_to=None):
     )
 
     # Update this path to your welcome image
-    file_path = r"video_2026-03-29_14-12-49.mp4"
+    file_path = r"video_2026-03-29_14-12-49-1.mp4"
 
     try:
         await client.send_file(
