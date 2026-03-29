@@ -30,10 +30,11 @@ async def main():
     """
     try:
         client = TelegramClient(SESSION_NAME, API_ID, API_HASH)
-        
-        await register_handlers(client)
-        
+
         await client.start(bot_token=BOT_TOKEN)
+
+        # Register handlers only after the client is connected/authenticated.
+        await register_handlers(client)
         
         print("✅ Bot started successfully!")
         print("💡 Use /status in your group to check bot permissions")

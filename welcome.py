@@ -167,11 +167,13 @@ async def register_userinfo_handler(client):
 async def register_welcome_handler(client):
     # Ignore historical service events from before this process started.
     bot_started_at = datetime.now(timezone.utc)
+    startup_grace_until = bot_started_at + timedelta(seconds=20)
 
     @client.on(events.ChatAction)
     async def auto_welcome_goodbye_handler(event):
         """Handle both welcome and goodbye events"""
         try:
+            now_utc = datetime.now(timezone.utc)
             action_message = getattr(event, 'action_message', None)
             action_date = getattr(action_message, 'date', None)
             if action_date is not None:
@@ -209,6 +211,10 @@ async def register_welcome_handler(client):
 
             # Goodbye logic
             if event.user_left or event.user_kicked:
+                if now_utc < startup_grace_until:
+                    logger.info("Skipping leave/kick chat action during startup grace period")
+                    return
+
                 if event.user:
                     target_user = await event.get_user()
                     key = f"goodbye_{target_user.id}_{chat.id}"
