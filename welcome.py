@@ -68,30 +68,36 @@ async def send_fancy_welcome(client, chat, target_user, reply_to=None):
     user_id_plain = f"<code>{target_user.id}</code>"
 
     caption = (
-        f"{greeting_text}\n\n"
-        f"✨ <b>Welcome to</b> ✨\n"
-        f"<b>{group_name}</b>\n\n"
-        "━━━━━━━━━━━━━━━━━\n"
-        f"👤 <b>Name</b> ➝ {name_clickable}\n"
-        f"🆔 <b>ID</b> ➝ {user_id_plain}\n"
-        f"📛 <b>Username</b> ➝ {username_display}\n"
-        "━━━━━━━━━━━━━━━━━\n\n"
-        "💬 <i>For queries, type</i> @admins"
+        f"""<blockquote>{greeting_text}
+<b>Welcome to</b>
+<b>{group_name}</b></blockquote>"""
+        "▰▱▱▱▱▱▱▱▱▱▱▱▱▱▰\n"
+        f"""<blockquote>➻ <b>Name</b> ➝ {name_clickable}
+➻ <b>ID</b> ➝ {user_id_plain}
+➻ <b>Username</b> ➝ {username_display}</blockquote>"""
+        "❅─────✧❅✦❅✧─────❅\n"
+        """<blockquote>★ MAKE NEW FRIENDS
+★ NSFW/PM, DM/PROMOTION = BAN
+★ FLIRT IN LIMITS
+★ GIVE RESPECT = TAKE RESPECT
+★ FOR QUERIES, TYPE @admins</blockquote>"""
+        "▰▱▱▱▱▱▱▱▱▱▱▱▱▱▰"
     )
 
     # Update this path to your welcome image
-    file_path = r"Welc.jpeg"
+    file_path = r"video_2026-03-29_14-12-49.mp4"
 
     try:
         await client.send_file(
             chat, file_path, caption=caption,
             reply_to=reply_to, parse_mode="html",
-            supports_streaming=True
+            supports_streaming=True,
+            force_document=False
         )
     except Exception as e:
-        # If image fails, send text only
+        # If video fails, send text only
         await client.send_message(chat, caption, parse_mode="html", reply_to=reply_to)
-        logger.error(f"Welcome image failed: {e}")
+        logger.error(f"Welcome video failed: {e}")
 
 async def send_fancy_goodbye(client, chat, target_user):
     """Send the goodbye message when user leaves"""
