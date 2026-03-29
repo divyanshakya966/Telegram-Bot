@@ -6,7 +6,7 @@ from telethon.tl.types import (
     UserStatusOnline, UserStatusOffline, UserStatusRecently,
     UserStatusLastWeek, UserStatusLastMonth, UserStatusEmpty
 )
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from security import check_user_is_admin
 from utils import logger
 
@@ -159,10 +159,22 @@ async def register_userinfo_handler(client):
         await event.reply(text, parse_mode='html')
 
 async def register_welcome_handler(client):
+    # Ignore historical service events from before this process started.
+    bot_started_at = datetime.now(timezone.utc)
+
     @client.on(events.ChatAction)
     async def auto_welcome_goodbye_handler(event):
         """Handle both welcome and goodbye events"""
         try:
+            action_message = getattr(event, 'action_message', None)
+            action_date = getattr(action_message, 'date', None)
+            if action_date is not None:
+                if action_date.tzinfo is None:
+                    action_date = action_date.replace(tzinfo=timezone.utc)
+                if action_date < bot_started_at - timedelta(seconds=5):
+                    logger.info("Skipping stale chat action event from before startup")
+                    return
+
             chat = await event.get_chat()
 
             # Welcome logic

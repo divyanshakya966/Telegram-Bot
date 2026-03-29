@@ -4,48 +4,11 @@ from user_mgmt import get_user_from_event
 from moderation import moderate_user
 from utils import get_recent_logs, format_log_text, logger
 from config import BAN_RIGHTS, MUTE_RIGHTS, UNBAN_RIGHTS
-from welcome import register_welcome_handler, send_fancy_welcome
+from welcome import register_welcome_handler
 from userinfo import register_userinfo_handler
 
 async def register_handlers(client):
     """Register all command handlers"""
-
-    @client.on(events.ChatAction)
-    async def handle_welcome(event):
-        try:
-            if not (event.user_joined or event.user_added):
-                return
-            new_user = None
-            
-            # Get the action from the event
-            if hasattr(event, 'action_message') and event.action_message:
-                action_msg = event.action_message
-                
-                # Case 1: User joined by themselves
-                if event.user_joined and hasattr(action_msg, 'from_id'):
-                    try:
-                        new_user = await client.get_entity(action_msg.from_id)
-                    except Exception:
-                        pass
-                
-                # Case 2: User was added by someone else
-                elif event.user_added and hasattr(action_msg, 'action') and hasattr(action_msg.action, 'users'):
-                    try:
-                        new_user_id = action_msg.action.users[0]
-                        new_user = await client.get_entity(new_user_id)
-                    except Exception:
-                        pass
-            
-            if new_user:
-                try:
-                    chat = await event.get_chat()
-                    await send_fancy_welcome(client, chat, new_user)
-                    logger.info(f"Welcomed: {new_user.first_name} ({new_user.id})")
-                except Exception as e:
-                    logger.error(f"Error sending welcome: {e}")
-                        
-        except Exception as e:
-            logger.error(f"Welcome handler error: {e}")
 
     @client.on(events.NewMessage(pattern=r'^/ban'))
     async def ban_cmd(event):
