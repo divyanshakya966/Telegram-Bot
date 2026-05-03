@@ -28,7 +28,8 @@ BOT_TOKEN = _get_required('BOT_TOKEN')
 # Bot Settings
 COMMAND_COOLDOWN = 2
 LOG_FILE = 'bot.log'
-SESSION_NAME = 'bot_session'
+# Allow overriding session path/name via environment so containers can persist sessions
+SESSION_NAME = os.getenv('SESSION_NAME', 'bot_session')
 
 # Rights configurations for moderation actions
 MUTE_RIGHTS = ChatBannedRights(until_date=None, send_messages=True)

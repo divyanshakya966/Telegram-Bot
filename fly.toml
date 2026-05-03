@@ -1,0 +1,19 @@
+[app]
+  # change this to your desired app name or leave blank and run `flyctl apps create` which will fill this
+  app = "my-telegram-bot"
+  primary_region = "iad"
+
+[build]
+  image = ""
+
+[[mounts]]
+  source = "bot-data"
+  destination = "/data"
+
+[env]
+  # You can define env defaults here but prefer `flyctl secrets set` for secrets
+  # SESSION_NAME can be overridden to use the mounted path: /data/bot_session
+  # SESSION_NAME = "/data/bot_session"
+
+[experimental]
+  allowed_public_ports = []
