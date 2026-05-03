@@ -6,3 +6,4 @@ bot.session
 bot_session.session
 bot_session.session-journal
 __pycache__
+ai_state.json
